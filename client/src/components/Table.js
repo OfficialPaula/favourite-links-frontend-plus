@@ -24,23 +24,43 @@ const TableBody = (props) => {
     return lowerCaseName.includes(lowerCaseSearchTerm) || lowerCaseURL.includes(lowerCaseSearchTerm);
   });
 
+  const [editData, setEditData] = useState({ id: null, name: '', url: '' });
+
   const handleUpdate = (id, updatedLink) => {
     // Call the updateLink prop function
     updateLink(id, updatedLink);
+    setEditData({ id: null, name: '', url: '' }); // Reset the edit state after updating
+  };
+
+  const handleEdit = (id, name, url) => {
+    setEditData({ id, name, url });
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setEditData((prevEditData) => ({
+      ...prevEditData,
+      [name]: value,
+    }));
   };
 
   const rows = filteredData.map((row, index) => {
+    const { id, name, url } = editData;
+    const isEditing = id === row.id;
+
     return (
       <tr key={index}>
-        <td>{row.name}</td>
-        <td>
-          <a href={row.url}>{row.url}</a>
-        </td>
+        <td>{isEditing ? <input type="text" name="name" value={name} onChange={handleInputChange} /> : row.name}</td>
+        <td>{isEditing ? <input type="text" name="url" value={url} onChange={handleInputChange} /> : <a href={row.url}>{row.url}</a>}</td>
         <td>
           <button onClick={() => removeLink(row.id)}>Delete</button>
         </td>
         <td>
-          <button onClick={() => handleUpdate(row.id, { name: 'Updated Name', url: 'Updated URL' })}>Edit</button>
+          {isEditing ? (
+            <button onClick={() => handleUpdate(row.id, { name, url })}>Save</button>
+          ) : (
+            <button onClick={() => handleEdit(row.id, row.name, row.url)}>Edit</button>
+          )}
         </td>
       </tr>
     );
