@@ -7,13 +7,14 @@ const TableHeader = () => {
         <th>Name</th>
         <th>URL</th>
         <th>Remove</th>
+        <th>Edit</th>
       </tr>
     </thead>
   );
 };
 
 const TableBody = (props) => {
-  const { linkData, searchTerm } = props;
+  const { linkData, searchTerm, removeLink, updateLink } = props;
 
   let data = linkData ? linkData : [];
   const filteredData = data.filter((link) => {
@@ -23,6 +24,11 @@ const TableBody = (props) => {
     return lowerCaseName.includes(lowerCaseSearchTerm) || lowerCaseURL.includes(lowerCaseSearchTerm);
   });
 
+  const handleUpdate = (id, updatedLink) => {
+    // Call the updateLink prop function
+    updateLink(id, updatedLink);
+  };
+
   const rows = filteredData.map((row, index) => {
     return (
       <tr key={index}>
@@ -31,7 +37,10 @@ const TableBody = (props) => {
           <a href={row.url}>{row.url}</a>
         </td>
         <td>
-          <button onClick={() => props.removeLink(row.id)}>Delete</button>
+          <button onClick={() => removeLink(row.id)}>Delete</button>
+        </td>
+        <td>
+          <button onClick={() => handleUpdate(row.id, { name: 'Updated Name', url: 'Updated URL' })}>Edit</button>
         </td>
       </tr>
     );
@@ -60,6 +69,7 @@ const Table = (props) => {
         <TableBody 
           linkData={props.linkData} 
           removeLink={props.removeLink} 
+          updateLink={props.updateLink} 
           searchTerm={searchTerm} 
         />
       </table>

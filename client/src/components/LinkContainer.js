@@ -20,18 +20,33 @@ const LinkContainer = (props) => {
     { method: 'DELETE' })  
   }
 
+  const handleUpdate = async (id, updatedLink) => {
+    // Send a PUT request to update a link
+    await fetch(`/links/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedLink),
+    });
+    // Update the list of links after update
+    setFavLinks(
+      favLinks.map((link) => (link.id === id ? { ...link, ...updatedLink } : link))
+    );
+  };
+  
   const handleSubmit = async (form) => {
     await fetch(`/links`, { method: 'POST', 
     headers: {
        'Content-Type': 'application/json' },body: 
        JSON.stringify({name:form.name,url:form.url})})
   }
-
+  
   return (
     <div className="container">
       <h1>My Favorite Links</h1>
       <p>Add a new url with a name and link to the table.</p>
-      <Table linkData={favLinks} removeLink={handleRemove} />
+      <Table linkData={favLinks} removeLink={handleRemove} updateLink={handleUpdate} />
       <br />
       <h3>Add New</h3>
       <Form handleSubmit={handleSubmit} />
