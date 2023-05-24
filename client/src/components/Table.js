@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Table.css';
 
 const TableHeader = () => {
   return (
@@ -50,16 +51,34 @@ const TableBody = (props) => {
 
     return (
       <tr key={index}>
-        <td>{isEditing ? <input type="text" name="name" value={name} onChange={handleInputChange} /> : row.name}</td>
-        <td>{isEditing ? <input type="text" name="url" value={url} onChange={handleInputChange} /> : <a href={row.url}>{row.url}</a>}</td>
+        <td className={isEditing ? 'editing' : ''}>
+          {isEditing ? (
+            <input type="text" name="name" value={name} onChange={handleInputChange} />
+          ) : (
+            row.name
+          )}
+        </td>
+        <td className={isEditing ? 'editing' : ''}>
+          {isEditing ? (
+            <input type="text" name="url" value={url} onChange={handleInputChange} />
+          ) : (
+            <a href={row.url}>{row.url}</a>
+          )}
+        </td>
         <td>
-          <button onClick={() => removeLink(row.id)}>Delete</button>
+          <button className="remove-button" onClick={() => removeLink(row.id)}>
+            Delete
+          </button>
         </td>
         <td>
           {isEditing ? (
-            <button onClick={() => handleUpdate(row.id, { name, url })}>Save</button>
+            <button className="save-button" onClick={() => handleUpdate(row.id, { name, url })}>
+              Save
+            </button>
           ) : (
-            <button onClick={() => handleEdit(row.id, row.name, row.url)}>Edit</button>
+            <button className="edit-button" onClick={() => handleEdit(row.id, row.name, row.url)}>
+              Edit
+            </button>
           )}
         </td>
       </tr>
@@ -77,20 +96,21 @@ const Table = (props) => {
   };
 
   return (
-    <div>
-      <input 
-        type="text" 
-        value={searchTerm} 
-        onChange={handleSearchChange} 
-        placeholder="Search by name or URL" 
+    <div className="table-container">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleSearchChange}
+        placeholder="Search by name or URL"
+        className="search-input"
       />
-      <table>
+      <table className="table">
         <TableHeader />
-        <TableBody 
-          linkData={props.linkData} 
-          removeLink={props.removeLink} 
-          updateLink={props.updateLink} 
-          searchTerm={searchTerm} 
+        <TableBody
+          linkData={props.linkData}
+          removeLink={props.removeLink}
+          updateLink={props.updateLink}
+          searchTerm={searchTerm}
         />
       </table>
     </div>

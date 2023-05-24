@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Form.css';
 
 const Form = ({ handleSubmit }) => {
   const [formData, setFormData] = useState({ name: '', url: '' });
@@ -18,17 +19,32 @@ const Form = ({ handleSubmit }) => {
   };
 
   return (
-    <form onSubmit={submitForm}>
-      <label htmlFor="name">Name:</label>
-      <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
+    <form className="form-container" onSubmit={submitForm}>
+      <label htmlFor="name" className="form-container__label">Name:</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        className="form-container__input"
+      />
       <br />
-      <label htmlFor="url">URL:</label>
-      <input type="text" id="url" name="url" value={formData.url} onChange={handleChange} />
+      <label htmlFor="url" className="form-container__label">URL:</label>
+      <input
+        type="text"
+        id="url"
+        name="url"
+        value={formData.url}
+        onChange={handleChange}
+        className="form-container__input"
+      />
       <br />
-      <button type="submit" onClick={submitForm}>Submit</button>
+      <button type="submit" className="form-container__button" onClick={submitForm}>
+        Submit
+      </button>
     </form>
   );
 };
 
 export default Form;
-
