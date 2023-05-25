@@ -5,10 +5,12 @@ const TableHeader = () => {
   return (
     <thead>
       <tr>
+      <th>Like</th>
         <th>Name</th>
         <th>URL</th>
         <th>Remove</th>
         <th>Edit</th>
+        <th>Dislike</th>
       </tr>
     </thead>
   );
@@ -26,6 +28,7 @@ const TableBody = (props) => {
   });
 
   const [editData, setEditData] = useState({ id: null, name: '', url: '' });
+  const [likeCounts, setLikeCounts] = useState({});
 
   const handleUpdate = (id, updatedLink) => {
     // Call the updateLink prop function
@@ -45,12 +48,32 @@ const TableBody = (props) => {
     }));
   };
 
+  const handleLike = (id) => {
+    setLikeCounts((prevCounts) => ({
+      ...prevCounts,
+      [id]: (prevCounts[id] || 0) + 1,
+    }));
+  };
+
+  const handleDislike = (id) => {
+    setLikeCounts((prevCounts) => ({
+      ...prevCounts,
+      [id]: (prevCounts[id] || 0) - 1,
+    }));
+  };
+
   const rows = filteredData.map((row, index) => {
     const { id, name, url } = editData;
     const isEditing = id === row.id;
+    const likeCount = likeCounts[row.id] || 0;
 
     return (
       <tr key={index}>
+        <td>
+          <button className="like-button" onClick={() => handleLike(row.id)}>
+            Like ({likeCount})
+          </button>
+        </td>
         <td className={isEditing ? 'editing' : ''}>
           {isEditing ? (
             <input type="text" name="name" value={name} onChange={handleInputChange} />
@@ -80,6 +103,11 @@ const TableBody = (props) => {
               Edit
             </button>
           )}
+        </td>
+        <td>
+          <button className="dislike-button" onClick={() => handleDislike(row.id)}>
+            Dislike
+          </button>
         </td>
       </tr>
     );
