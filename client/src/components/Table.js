@@ -8,6 +8,7 @@ const TableHeader = () => {
         <th>Like</th>
         <th>Name</th>
         <th>URL</th>
+        <th>Bookmark</th>
         <th>Remove</th>
         <th>Edit</th>
         <th>Dislike</th>
@@ -29,6 +30,7 @@ const TableBody = (props) => {
 
   const [editData, setEditData] = useState({ id: null, name: '', url: '' });
   const [likeCounts, setLikeCounts] = useState({});
+  const [bookmarks, setBookmarks] = useState([]);
 
   const handleUpdate = (id, updatedLink) => {
     updateLink(id, updatedLink);
@@ -61,10 +63,19 @@ const TableBody = (props) => {
     }));
   };
 
+  const toggleBookmark = (id) => {
+    if (bookmarks.includes(id)) {
+      setBookmarks((prevBookmarks) => prevBookmarks.filter((bookmark) => bookmark !== id));
+    } else {
+      setBookmarks((prevBookmarks) => [...prevBookmarks, id]);
+    }
+  };
+
   const rows = filteredData.map((row, index) => {
     const { id, name, url } = editData;
     const isEditing = id === row.id;
     const likeCount = likeCounts[row.id] || 0;
+    const isBookmarked = bookmarks.includes(row.id);
 
     return (
       <tr key={index}>
@@ -86,6 +97,14 @@ const TableBody = (props) => {
           ) : (
             <a href={row.url}>{row.url}</a>
           )}
+        </td>
+        <td>
+          <button
+            className={`bookmark-button ${isBookmarked ? 'bookmarked' : ''}`}
+            onClick={() => toggleBookmark(row.id)}
+          >
+            {isBookmarked ? 'Bookmarked' : 'Bookmark'}
+          </button>
         </td>
         <td>
           <button className="remove-button" onClick={() => removeLink(row.id)}>
@@ -121,7 +140,6 @@ const Table = (props) => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
-  
 
   return (
     <div className="table-container">

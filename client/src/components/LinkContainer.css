@@ -58,3 +58,9 @@
   opacity: 0.1; /* Adjust the opacity of the pattern */
   pointer-events: none;
 }
+
+.emoji__label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}

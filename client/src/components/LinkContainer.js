@@ -7,6 +7,7 @@ import InfiniteScroll from './InfiniteScroll';
 
 const LinkContainer = (props) => {
   const [favLinks, setFavLinks] = useState([]);
+  const [bookmarkedLinks, setBookmarkedLinks] = useState([]);
 
   useEffect(() => {
     const getLinks = async () => {
@@ -14,6 +15,10 @@ const LinkContainer = (props) => {
         const data = await fetch('/links');
         const json = await data.json();
         setFavLinks(json);
+        const storedBookmarks = localStorage.getItem('bookmarkedLinks');
+        if (storedBookmarks) {
+          setBookmarkedLinks(JSON.parse(storedBookmarks));
+        }
       } catch (error) {
         console.error(error);
       }
@@ -22,6 +27,10 @@ const LinkContainer = (props) => {
     getLinks();
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem('bookmarkedLinks', JSON.stringify(bookmarkedLinks));
+  }, [bookmarkedLinks]);
+
   const handleRemove = async (id) => {
     try {
       await fetch(`/links/${id}`, {
@@ -29,6 +38,7 @@ const LinkContainer = (props) => {
       });
 
       setFavLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
+      setBookmarkedLinks((prevBookmarks) => prevBookmarks.filter((link) => link.id !== id));
     } catch (error) {
       console.error(error);
     }
@@ -52,6 +62,17 @@ const LinkContainer = (props) => {
     }
   };
 
+  const handleBookmark = (id) => {
+    if (bookmarkedLinks.some((link) => link.id === id)) {
+      setBookmarkedLinks((prevBookmarks) => prevBookmarks.filter((link) => link.id !== id));
+    } else {
+      const linkToBookmark = favLinks.find((link) => link.id === id);
+      if (linkToBookmark) {
+        setBookmarkedLinks((prevBookmarks) => [...prevBookmarks, linkToBookmark]);
+      }
+    }
+  };
+
   const handleSubmit = async (form) => {
     try {
       await fetch('/links', {
@@ -68,14 +89,33 @@ const LinkContainer = (props) => {
     }
   };
 
+  const handleCopyTable = () => {
+    const tableData = favLinks.map((link) => `${link.name} - ${link.url}`).join('\n');
+    navigator.clipboard.writeText(tableData);
+  };
+
   return (
     <div className="link-container">
       <h1 className="link-container__title">My Favorite Links</h1>
       <p className="link-container__subtitle">
         Add a new URL with a name and link to the table.
       </p>
+      <br />
+      <p className="emoji__label">
+        (Select an EMOJI to be enlarged as your profile)
+        <br />
+      </p>
       <ProfileCircle />
-      <Table linkData={favLinks} removeLink={handleRemove} updateLink={handleUpdate} />
+      <button className="link-container__copy-button" onClick={handleCopyTable}>
+        Copy Table
+      </button>
+      <Table
+        linkData={favLinks}
+        bookmarkedLinks={bookmarkedLinks}
+        removeLink={handleRemove}
+        updateLink={handleUpdate}
+        toggleBookmark={handleBookmark}
+      />
       <br />
       <h3 className="link-container__form-title">Add New</h3>
       <Form handleSubmit={handleSubmit} />
