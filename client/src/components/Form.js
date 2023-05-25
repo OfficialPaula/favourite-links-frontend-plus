@@ -14,9 +14,21 @@ const Form = ({ handleSubmit }) => {
 
   const submitForm = (event) => {
     event.preventDefault();
-    handleSubmit(formData);
-    setFormData({ name: '', url: '' });
+  
+    let url = formData.url;
+    if (formData.name === '' || formData.url === '' || formData === null) {
+      window.alert(
+        "\nEnter a valid Name or URL:\n\nName field must not be blank. URL must start with 'https://'"
+      );
+    } else if (!url.startsWith('https')) {
+      window.alert("\nEnter a valid URL:\n\nURL must start with 'https://'");
+    } else {
+      handleSubmit(formData);
+      document.getElementById('form').reset();
+      setFormData({ name: '', url: '' });
+    }
   };
+  
 
   return (
     <form className="form-container" onSubmit={submitForm}>

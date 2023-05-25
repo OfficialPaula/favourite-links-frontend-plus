@@ -37,3 +37,24 @@
   font-weight: bold;
   text-align: center;
 }
+
+.profile-circle {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: #ebebeb; /* Set a background color for the circle */
+  overflow: hidden;
+}
+
+.profile-circle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/Users/admin/Desktop/COPY OF PERN/client/src/rm218batch9-mynt-38.jpg'); /* Set the path to your pattern image */
+  opacity: 0.1; /* Adjust the opacity of the pattern */
+  pointer-events: none;
+}
