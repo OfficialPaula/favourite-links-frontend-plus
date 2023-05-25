@@ -3,6 +3,7 @@ import Table from './Table';
 import Form from './Form';
 import './LinkContainer.css';
 import ProfileCircle from './ProfileCircle';
+import InfiniteScroll from './InfiniteScroll';
 
 const LinkContainer = (props) => {
   const [favLinks, setFavLinks] = useState([]);
@@ -73,11 +74,12 @@ const LinkContainer = (props) => {
       <p className="link-container__subtitle">
         Add a new URL with a name and link to the table.
       </p>
-      <ProfileCircle /> {/* Add ProfileCircle component */}
+      <ProfileCircle />
       <Table linkData={favLinks} removeLink={handleRemove} updateLink={handleUpdate} />
       <br />
       <h3 className="link-container__form-title">Add New</h3>
       <Form handleSubmit={handleSubmit} />
+      <InfiniteScroll />
     </div>
   );
 };

@@ -14,7 +14,6 @@ const Form = ({ handleSubmit }) => {
 
   const submitForm = (event) => {
     event.preventDefault();
-  
     let url = formData.url;
     if (formData.name === '' || formData.url === '' || formData === null) {
       window.alert(
@@ -28,11 +27,13 @@ const Form = ({ handleSubmit }) => {
       setFormData({ name: '', url: '' });
     }
   };
-  
 
+  
   return (
-    <form className="form-container" onSubmit={submitForm}>
-      <label htmlFor="name" className="form-container__label">Name:</label>
+    <form className="form-container" onSubmit={submitForm} id="form">
+      <label htmlFor="name" className="form-container__label">
+        Name:
+      </label>
       <input
         type="text"
         id="name"
@@ -42,7 +43,9 @@ const Form = ({ handleSubmit }) => {
         className="form-container__input"
       />
       <br />
-      <label htmlFor="url" className="form-container__label">URL:</label>
+      <label htmlFor="url" className="form-container__label">
+        URL:
+      </label>
       <input
         type="text"
         id="url"

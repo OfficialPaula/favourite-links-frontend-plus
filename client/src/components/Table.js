@@ -5,7 +5,7 @@ const TableHeader = () => {
   return (
     <thead>
       <tr>
-      <th>Like</th>
+        <th>Like</th>
         <th>Name</th>
         <th>URL</th>
         <th>Remove</th>
@@ -31,9 +31,8 @@ const TableBody = (props) => {
   const [likeCounts, setLikeCounts] = useState({});
 
   const handleUpdate = (id, updatedLink) => {
-    // Call the updateLink prop function
     updateLink(id, updatedLink);
-    setEditData({ id: null, name: '', url: '' }); // Reset the edit state after updating
+    setEditData({ id: null, name: '', url: '' });
   };
 
   const handleEdit = (id, name, url) => {
@@ -122,6 +121,7 @@ const Table = (props) => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
+  
 
   return (
     <div className="table-container">
