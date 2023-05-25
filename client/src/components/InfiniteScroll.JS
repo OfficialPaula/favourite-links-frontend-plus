@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const InfiniteScroll = () => {
   // State variables
@@ -13,19 +14,26 @@ const InfiniteScroll = () => {
   }, []);
 
   // Fetch more data
-  const fetchData = () => {
+  const fetchData = async () => {
     setIsLoading(true);
 
-    const newItems = generateData(); // Generate new data
+    try {
+      const response = await axios.get(
+        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=12&page=1&sparkline=false'
+      );
+      const newData = response.data;
 
-    // Check if all data has been loaded
-    if (newItems.length === 0) {
-      setAllDataLoaded(true);
-      setIsLoading(false);
-      return;
+      // Check if all data has been loaded
+      if (newData.length === 0) {
+        setAllDataLoaded(true);
+        setIsLoading(false);
+        return;
+      }
+
+      setItems(prevItems => [...prevItems, ...newData]);
+    } catch (error) {
+      setError(error);
     }
-
-    setItems(prevItems => [...prevItems, ...newItems]);
 
     setIsLoading(false);
   };
@@ -60,18 +68,6 @@ const InfiniteScroll = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [isLoading, allDataLoaded]);
-
-  // Function to generate sample data (replace with your own data source)
-  const generateData = () => {
-    const newData = [];
-    for (let i = items.length + 1; i <= items.length + 10; i++) {
-      newData.push({
-        id: i,
-        name: `Hello # ${i}`,
-      });
-    }
-    return newData;
-  };
 
   return (
     <div>

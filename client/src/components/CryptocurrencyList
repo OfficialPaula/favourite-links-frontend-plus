@@ -1,0 +1,21 @@
+import React from 'react';
+import CryptoCard from './CryptoCard';
+import './CryptocurrencyList.css'; // Import the CSS file
+
+const CryptocurrencyList = ({ cryptocurrencies }) => {
+  return (
+    <div className="crypto_list"> {/* Apply CSS class */}
+      {cryptocurrencies.map((crypto) => (
+        <CryptoCard
+          key={crypto.id}
+          image={crypto.image}
+          name={crypto.name}
+          price={crypto.price}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default CryptocurrencyList;
+
