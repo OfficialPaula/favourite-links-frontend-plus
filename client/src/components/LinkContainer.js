@@ -4,6 +4,7 @@ import Form from './Form';
 import './LinkContainer.css';
 import ProfileCircle from './ProfileCircle';
 import InfiniteScroll from './InfiniteScroll';
+import Clock from './Clock';
 
 const LinkContainer = (props) => {
   const [favLinks, setFavLinks] = useState([]);
@@ -96,6 +97,7 @@ const LinkContainer = (props) => {
 
   return (
     <div className="link-container">
+      <Clock />
       <h1 className="link-container__title">My Favorite Links</h1>
       <p className="link-container__subtitle">
         Add a new URL with a name and link to the table.

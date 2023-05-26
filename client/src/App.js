@@ -5,8 +5,8 @@ import DarkMode from './components/DarkMode.tsx';
 function App() {
   return (
     <div className="App">
-      <LinkContainer />
       <DarkMode />
+      <LinkContainer />
     </div>
   )
 }
