@@ -5,10 +5,17 @@ import './LinkContainer.css';
 import ProfileCircle from './ProfileCircle';
 import InfiniteScroll from './InfiniteScroll';
 import Clock from './Clock';
+import LoginPage from './Login';
+import CreatePasswordPage from './CreatePasswordPage';
 
 const LinkContainer = (props) => {
   const [favLinks, setFavLinks] = useState([]);
   const [bookmarkedLinks, setBookmarkedLinks] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [passwordCreated, setPasswordCreated] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false);
 
   useEffect(() => {
     const getLinks = async () => {
@@ -94,6 +101,29 @@ const LinkContainer = (props) => {
     const tableData = favLinks.map((link) => `${link.name} - ${link.url}`).join('\n');
     navigator.clipboard.writeText(tableData);
   };
+
+  const handleLogin = (loginUsername, loginPassword) => {
+    if (username === loginUsername && password === loginPassword) {
+      setLoggedIn(true);
+      setLoginError(false);
+    } else {
+      setLoginError(true);
+    }
+  };
+
+  const handleCreatePassword = (newUsername, newPassword) => {
+    setUsername(newUsername);
+    setPassword(newPassword);
+    setPasswordCreated(true);
+  };
+
+  if (!passwordCreated) {
+    return <CreatePasswordPage onCreatePassword={handleCreatePassword} />;
+  }
+
+  if (!loggedIn) {
+    return <LoginPage onLogin={handleLogin} loginError={loginError} />;
+  }
 
   return (
     <div className="link-container">
